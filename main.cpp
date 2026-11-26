@@ -1,4 +1,4 @@
-
+//Contribution by friend - DSA 
 #include <iostream>
 #include <map>
 #include <algorithm>
@@ -10,6 +10,10 @@ class WarehouseIndex {
 
 public:
     void addPackage(long long id) {
+        if (id < 0 || id > 1000000000LL) {
+    cout << "Invalid package ID!\n";
+    return;
+}
         auto next = intervals.upper_bound(id);
 
         if (next != intervals.begin()) {
@@ -64,46 +68,53 @@ public:
         cout << "\n";
     }
 
-    void displayMissing(long long low, long long high) {
-        if (low < 0 || high < low) {
-            cout << "Invalid range!\n";
-            return;
-        }
-
-        long long current = low;
-
-        cout << "\nMissing ranges: ";
-
-        for (auto p : intervals) {
-            long long start = p.first;
-            long long end = p.second;
-
-            if (end < current)
-                continue;
-
-            if (start > high)
-                break;
-
-            if (start > current)
-                cout << "[" << current << ", "
-                     << min(high, start - 1) << "] ";
-
-            if (end >= high) {
-                current = high + 1;
-                break;
-            }
-
-            current = max(current, end + 1);
-        }
-
-        if (current <= high)
-            cout << "[" << current << ", " << high << "] ";
-
-        if (current > high)
-            cout << "None";
-
-        cout << "\n";
+    
+void displayMissing(long long low, long long high) {
+    if (low < 0 || high < low) {
+        cout << "Invalid range!\n";
+        return;
     }
+
+    long long current = low;
+    bool found = false;
+
+    cout << "\nMissing ranges: ";
+
+    for (auto p : intervals) {
+        long long start = p.first;
+        long long end = p.second;
+
+        if (end < current)
+            continue;
+
+        if (start > high)
+            break;
+
+        if (start > current) {
+            cout << "[" << current << ", "
+                 << min(high, start - 1) << "] ";
+
+            found = true;
+        }
+
+        if (end >= high) {
+            current = high + 1;
+            break;
+        }
+
+        current = max(current, end + 1);
+    }
+
+    if (current <= high) {
+        cout << "[" << current << ", " << high << "] ";
+        found = true;
+    }
+
+    if (!found)
+        cout << "None";
+
+    cout << "\n";
+}
 
     void displayWithinRange(long long low, long long high) {
         if (low < 0 || high < low) {
