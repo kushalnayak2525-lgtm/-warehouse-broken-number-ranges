@@ -10,6 +10,10 @@ class WarehouseIndex {
 
 public:
     void addPackage(long long id) {
+        if (id < 0 || id > 1000000000LL) {
+    cout << "Invalid package ID!\n";
+    return;
+}
         auto next = intervals.upper_bound(id);
 
         if (next != intervals.begin()) {
